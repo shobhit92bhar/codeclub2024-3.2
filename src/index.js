@@ -1,15 +1,43 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+// src/index.js
+var src_default = {
+  async fetch(request, env, ctx) {
+  	const randomResponses = {
+  		0: "Response 1",
+  		1: "Response 2",
+  		2: "Response 3",
+  		3: "Response 4"
+  	};
+  	const max = 4;
+    if (request.method == 'GET') {
+    		const generatedRandom = generateRandomNumber(max);
+    		const getRandom = randomResponses[generatedRandom];
+           	return new Response(getRandom, {
+               headers: {
+                   'content-type': 'text/plain',
+               },
+           });
+       }
+       else {
+       		// Sample JSON data to send as response
+      		const jsonData = {
+        		message: 'POST',
+        		data: 'request'
+      		};
+      		return new Response(JSON.stringify(jsonData), {
+       			headers: {
+       				'content-type': 'application/json',
+       			},
+       		});
+       }
+  }
+};
+export {
+  src_default as default
+};
+//# sourceMappingURL=index.js.map
 
-export default {
-	async fetch(request, env, ctx) {
-		return new Response('Hello World!');
-	},
+function generateRandomNumber (max)
+{
+	const newRandom = Math.floor(Math.random() * max);
+	return newRandom;
 };
